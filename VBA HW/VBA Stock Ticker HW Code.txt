@@ -1,0 +1,87 @@
+Option Explicit
+Sub Test_Script():
+    Dim Current_Ticker As String
+    Dim Next_Ticker As String
+    Dim Summary_Table_Row As Long
+    Dim Stock_Volume As LongLong
+    Dim Yearly_Change As Double
+    Dim Percent_Change As Double
+    Dim r As LongLong
+    Dim Last_Row As Double
+    Dim Open_Price As Double
+    Dim Close_Price As Double
+    Dim ws As Worksheet
+    Dim Greatest_Increase As Double
+    Dim Greatest_Decrease As Double
+    Dim Greatest_Total_Volume As Double
+    Dim Greatest_Increase_Ticker As String
+    Dim Greatest_Decrease_Ticker As String
+    Dim Greatest_Total_Volume_Ticker As String
+    
+        
+    For Each ws In Worksheets
+        
+        Last_Row = ws.Cells(Rows.Count, 1).End(xlUp).Row
+        Summary_Table_Row = 2
+        Stock_Volume = 0
+        Open_Price = ws.Cells(2, 3).Value
+        ws.Range("I1") = "Ticker"
+        ws.Range("J1") = "Yearly Change"
+        ws.Range("K1") = "Percent Change"
+        ws.Range("L1") = "Total Stock Volume"
+        
+        
+        For r = 2 To Last_Row
+        
+        ws.Range("L" & Summary_Table_Row).NumberFormat = "$#,###"
+        ws.Range("K" & Summary_Table_Row).NumberFormat = "0.00%"
+        ws.Range("J" & Summary_Table_Row).NumberFormat = "$#,###.#0"
+           
+            Stock_Volume = Stock_Volume + ws.Cells(r, 7).Value
+            If ws.Cells(r + 1, 1).Value <> ws.Cells(r, 1).Value Then
+                Close_Price = ws.Cells(r, 6).Value
+                Yearly_Change = Close_Price - Open_Price
+                If Open_Price = 0 Then
+                    Percent_Change = (Yearly_Change / 0.0000001)
+                Else:
+                    Percent_Change = (Yearly_Change / Open_Price)
+                End If
+                Current_Ticker = ws.Cells(r, 1).Value
+                ws.Range("I" & Summary_Table_Row).Value = Current_Ticker
+                ws.Range("J" & Summary_Table_Row).Value = Yearly_Change
+                If Yearly_Change > 0 Then
+                    ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 4
+                ElseIf Yearly_Change < 0 Then
+                    ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 3
+                Else
+                    ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 2
+                End If
+                
+                ws.Range("K" & Summary_Table_Row).Value = Percent_Change
+                ws.Range("L" & Summary_Table_Row).Value = Stock_Volume
+                Summary_Table_Row = Summary_Table_Row + 1
+                Stock_Volume = 0
+                Open_Price = ws.Cells(r + 1, 3)
+                
+               
+                
+            End If
+        Next r
+      
+        Greatest_Increase = WorksheetFunction.Max(ws.Range("K2:K" & Summary_Table_Row))
+        Greatest_Increase_Ticker = ws.Cells(Application.Match(Greatest_Increase, ws.Range("K1:K" & Summary_Table_Row), 0), 9).Value
+        Greatest_Decrease = WorksheetFunction.Min(ws.Range("K2:K" & Summary_Table_Row))
+        Greatest_Decrease_Ticker = ws.Cells(Application.Match(Greatest_Decrease, ws.Range("K1:K" & Summary_Table_Row), 0), 9).Value
+        Greatest_Total_Volume = WorksheetFunction.Max(ws.Range("L2:L" & Summary_Table_Row))
+        Greatest_Total_Volume_Ticker = ws.Cells(Application.Match(Greatest_Total_Volume, ws.Range("L1:L" & Summary_Table_Row), 0), 9).Value
+        
+        
+        ws.Range("O2").Value = Greatest_Increase_Ticker
+        ws.Range("P2").Value = Greatest_Increase
+        ws.Range("O3").Value = Greatest_Decrease_Ticker
+        ws.Range("P3").Value = Greatest_Decrease
+        ws.Range("O4").Value = Greatest_Total_Volume_Ticker
+        ws.Range("P4").Value = Greatest_Total_Volume
+
+    Next ws
+End Sub

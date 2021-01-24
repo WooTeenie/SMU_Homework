@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Weather Analysis</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+                <a class="navbar-brand" href="index.html">Weather Analysis</a>
+            </div>
+            <!-- <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form> -->
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Plots <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="max_temp.html">Max Temperature</a></li>
+                        <li><a href="humidity.html">Humidity</a></li>
+                        <li><a href="cloudiness.html">Cloudiness</a></li>
+                        <li><a href="wind_speed.html">Wind Speed</a></li>
+                    </ul>
+                </li>
+                <li><a href="comparison.html">Comparison</a></li>
+                <li><a href="data.html">Data</a></li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="col-sm">
+            <h1>Comparison: Latitude vs. X</h1>
+            <hr>
+            <p>Click any plot to get an in-depth analysis</p>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <a href="max_temp.html"><img src="assets\images\vs Max Temp Image.png" style="max-width:100%;height:auto;" alt="Latitude vs. Max Temperature"></a>
+                <a href="humidity.html"><img src="assets\images\vs Humidity Image.png" style="max-width:100%;height:auto;" alt="Latitude vs. Humidity"></a>
+            </div>
+            <div class="col-sm">
+                <a href="cloudiness.html"><img src="assets\images\vs Cloudiness Image.png" style="max-width:100%;height:auto;" alt="Latitude vs. Cloudiness"></a>
+                <a href="wind_speed.html"><img src="assets\images\vs Windspeed Image.png" style="max-width:100%;height:auto;" alt="Latitude vs. Wind Speed"></a>
+            </div>
+        </div>
+</body>
+
+</html>
