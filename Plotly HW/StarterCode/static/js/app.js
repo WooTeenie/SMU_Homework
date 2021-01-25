@@ -4,7 +4,7 @@ $(document).ready(function() {
     perform();
 
     $('#selDataset').change(function() {
-        doWork();
+        work();
     });
 });
 
@@ -13,23 +13,23 @@ function perform() {
         g_data = data;
 
         makeFilters(data);
-        doWork();
+        work();
     });
 }
 
-function doWork() {
-    var sample = parseInt($("#selDataset").val());
-    var metadata = g_data.metadata.filter(x => x.id === sample)[0];
-    var sample_data = g_data.samples.filter(x => x.id == sample)[0];
+function work() {
+    var subject = parseInt($("#selDataset").val());
+    var metadata = g_data.metadata.filter(x => x.id === subject)[0];
+    var sample_values = g_data.samples.filter(x => x.id == subject)[0];
 
     makeDemo(metadata);
-    makePlots(sample_data, metadata);
+    makePlots(sample_values, metadata);
 }
 
-function makePlots(sample_data, metadata) {
+function makePlots(sample_values, metadata) {
     $('#plots').show();
-    makeBar(sample_data);
-    makeBubble(sample_data);
+    makeBar(sample_values);
+    makeBubble(sample_values);
     makeGauge(metadata);
 }
 
@@ -75,16 +75,16 @@ function makeBar(sample_data) {
     Plotly.newPlot('bar', traces, layout);
 }
 
-function makeBubble(sample_data) {
+function makeBubble(sample_values) {
     var trace = {
-        x: sample_data.otu_ids,
-        y: sample_data.sample_values,
+        x: sample_values.otu_ids,
+        y: sample_values.sample_values,
         mode: 'markers',
         marker: {
-            size: sample_data.sample_values,
-            color: sample_data.otu_ids
+            size: sample_values.sample_values,
+            color: sample_values.otu_ids
         },
-        text: sample_data.otu_labels
+        text: sample_values.otu_labels
     };
 
     var traces = [trace];
