@@ -23,17 +23,15 @@
     cursor: pointer;
 }
 
-
-/* font size dependent on radius, see app.js */
-
 .stateText {
     font-family: sans-serif;
-    fill: #fff;
+    fill: black;
+    font-weight: bold;
     text-anchor: middle;
 }
 
 .stateCircle {
-    fill: #89bdd3;
+    fill: #1a3fe6;
     stroke: #e3e3e3;
 }
 
