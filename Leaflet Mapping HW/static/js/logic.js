@@ -42,7 +42,6 @@ function formMap(data, tectonic) {
     $("#mapcontainer").append(`<div id="mapid"></div>`);
 
     // Step 0: Create the Tile Layers
-    // Add a tile layer
     var dark_mode = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
         attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
         tileSize: 512,
@@ -70,7 +69,7 @@ function formMap(data, tectonic) {
         accessToken: API_KEY
     });
 
-    // STEP 1: INIT MAP
+    // STEP 1: Form the Map
     // Create a map object
     var myMap = L.map("mapid", {
         center: [25.0, -15.0],
@@ -97,19 +96,16 @@ function formMap(data, tectonic) {
         circle_list.push(circle);
     });
 
-    // create tectonic plates
-    var tectonic_plates = L.geoJSON(tectonic, {
+    var boundaries = L.geoJSON(tectonic, {
         color: "brown",
         weight: 3
     });
 
-
-    var marker_group = L.layerGroup(earthquakes);
-    var marker_group2 = L.layerGroup(circle_list);
-    var tectonic_layer = L.layerGroup([tectonic_plates]); // note this has to be a list
+    var earthquake_markers = L.layerGroup(earthquakes);
+    var earthquake_circles = L.layerGroup(circle_list);
+    var tectonic_plate_layer = L.layerGroup([boundaries]);
 
     //STEP 3: Create Layers
-    // Create Layer Legend
     var baseMaps = {
         "Light Mode": light_mode,
         "Dark Mode": dark_mode,
@@ -117,27 +113,27 @@ function formMap(data, tectonic) {
     };
 
     var overlayMaps = {
-        "Markers": marker_group,
-        "Circles": marker_group2,
-        "Tectonic Plates": tectonic_layer
+        "Earthquake Location": earthquake_markers,
+        "Earthquakes": earthquake_circles,
+        "Tectonic Plates": tectonic_plate_layer
     };
 
-    // Slap Layer Legend onto the map
+    // Put Top Right Layer Legend onto the map
     L.control.layers(baseMaps, overlayMaps).addTo(myMap);
 
-    // add layers pre-clicked to map
-    tectonic_plates.addTo(myMap);
-    marker_group2.addTo(myMap);
+    // Put the initial load layers on the Map
+    boundaries.addTo(myMap);
+    earthquake_circles.addTo(myMap);
 
-    // Step 4: CREATE THE LEGEND (of Zelda)
+    // Step 4: Create the Earthquake Legend
 
     // Set up the legend
     var legend = L.control({ position: "bottomright" });
     legend.onAdd = function() {
         var div = L.DomUtil.create("div", "info legend");
 
-        // create legend as raw html
-        var legendInfo = `<h4 style = "margin-bottom:10px"> Earthquake Depth </h4>
+        // create legend as raw html - just easier this way
+        var legendInfo = `<h5 style = "margin-bottom:10px"> Earthquake Depth </h5>
         <div>
         <div style = "background:#98ee00;height:10px;width:10px;display:inline-block"> </div> 
         <div style = "display:inline-block"> Less than 10 Miles</div>
@@ -169,7 +165,6 @@ function formMap(data, tectonic) {
 
     // Adding legend to the map
     legend.addTo(myMap);
-
 }
 
 function createMarkerOptions(feature) {
@@ -201,9 +196,7 @@ function createMarkerOptions(feature) {
     return (geojsonMarkerOptions)
 }
 
-// called in the create circles
 function onEachFeature(feature, layer) {
-    // does this feature have a property named popupContent?
     if (feature.properties && feature.properties.place) {
         layer.bindPopup(feature.properties.title);
     }
