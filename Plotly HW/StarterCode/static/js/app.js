@@ -11,8 +11,8 @@ $(document).ready(function() {
 function perform() {
     d3.json("samples.json").then((data) => {
         g_data = data;
+        console.log(g_data);
 
-        makeFilters(data);
         work();
     });
 }
@@ -29,16 +29,8 @@ function work() {
 function makePlots(sample_values, metadata) {
     $('#plots').show();
     makeBar(sample_values);
-    makeBubble(sample_values);
-    makeGauge(metadata);
 }
 
-function makeFilters(data) {
-    data.names.forEach(function(val) {
-        var newOption = `<option>${val}</option>`;
-        $('#selDataset').append(newOption);
-    });
-}
 
 function makeDemo(metadata) {
     //refresh the data each time updated
@@ -73,56 +65,4 @@ function makeBar(sample_data) {
     var traces = [trace];
 
     Plotly.newPlot('bar', traces, layout);
-}
-
-function makeBubble(sample_values) {
-    var trace = {
-        x: sample_values.otu_ids,
-        y: sample_values.sample_values,
-        mode: 'markers',
-        marker: {
-            size: sample_values.sample_values,
-            color: sample_values.otu_ids
-        },
-        text: sample_values.otu_labels
-    };
-
-    var traces = [trace];
-
-    var layout = {
-        title: { text: "Amount of Bacteria by Type in Subject's Belly Button", font: { size: 32 } },
-        xaxis: { title: "OTU ID" },
-        yaxis: { title: "Amount of Bacteria" }
-    }
-
-    Plotly.newPlot('bubble', traces, layout);
-}
-
-function makeGauge(metadata) {
-    var max_wfreq = 10;
-
-    var trace = {
-        domain: { x: [0, 1], y: [0, 1] },
-        value: metadata.wfreq,
-        title: { text: "Belly Button Washing Frequency", font: { size: 32 } },
-        type: "indicator",
-        gauge: {
-            axis: { range: [null, max_wfreq] },
-            steps: [
-                { range: [0, 7], color: "lightgray" },
-                { range: [7, 10], color: "gray" }
-            ],
-            threshold: {
-                line: { color: "red", width: 4 },
-                thickness: 0.75,
-                value: 2
-            }
-        },
-        mode: "gauge+number+delta"
-    };
-    var traces = [trace];
-    var layout = {
-        font: { color: "Black", family: "Arial" }
-    }
-    Plotly.newPlot('gauge', traces, layout);
 }
